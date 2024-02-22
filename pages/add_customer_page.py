@@ -1,13 +1,10 @@
 import allure
 
 from pages.base_page import BasePage
-from config.links import Links
 from selenium.webdriver.support import expected_conditions as EC
 
 
 class AddCustomerPage(BasePage):
-    PAGE_URL = Links.ADD_CUSTOMER_PAGE
-
     FIRST_NAME_FIELD = ("xpath", "//form[@name='myForm']//input[@ng-model='fName']")
     LAST_NAME_FIELD = ("xpath", "//form[@name='myForm']//input[@ng-model='lName']")
     POST_CODE_FIELD = ("xpath", "//form[@name='myForm']//input[@ng-model='postCd']")

@@ -1,20 +1,21 @@
+import allure
+
 from pages.base_page import BasePage
-from config.links import Links
 from selenium.webdriver.support import expected_conditions as EC
 
 
 class ListCustomersPage(BasePage):
-    PAGE_URL = Links.LIST_CUSTOMERS_PAGE
-
     FIRST_NAME_TITLE = ("xpath", "//a[contains(text(),'First Name')]")
     FIRST_NAMES_LIST = ("xpath", "(//tr[@class='ng-scope']//td[1])")
     DELETE_BTN_LIST = ("xpath", "(//button[@ng-click='deleteCust(cust)'])")
 
+    @allure.step("Sort column by first name")
     def sort_by_first_name(self):
         column = self.wait.until(EC.element_to_be_clickable(self.FIRST_NAME_TITLE))
         column.click()
         column.click()
 
+    @allure.step("Delete customers by special condition")
     def delete_specific_customers(self):
         names_elements = self.wait.until(
             EC.presence_of_all_elements_located(self.FIRST_NAMES_LIST),

@@ -6,6 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 class BasePage:
     PAGE_URL = None
 
+    BTN_MENU_LIST = ("xpath", "(//div[@class='center']//button)")
+
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10, poll_frequency=1)
@@ -17,3 +19,13 @@ class BasePage:
     def is_open(self):
         with allure.step(f"Page {self.PAGE_URL} is opened"):
             self.wait.until(EC.url_to_be(self.PAGE_URL))
+
+    def click_on_item_menu(self, item_title):
+        with allure.step(f"Click on {item_title}"):
+            btn_menu_elements = self.wait.until(
+                EC.visibility_of_all_elements_located(self.BTN_MENU_LIST)
+            )
+            for i in btn_menu_elements:
+                if i.text == item_title:
+                    i.click()
+                    break
