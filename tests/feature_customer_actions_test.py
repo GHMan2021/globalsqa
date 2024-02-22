@@ -3,13 +3,14 @@ import time
 from pages.add_customer_page import AddCustomerPage
 from pages.list_customers_page import ListCustomersPage
 from pages.manager_page import ManagerPage
+from data.data import Customer
 
 
 def test_create_customer_and_delete_specific_customer(
         driver,
-        first_name='Abzap',
-        last_name='Troy',
-        post_code='0001252667'
+        first_name=Customer.first_name,
+        last_name=Customer.last_name,
+        post_code=Customer.post_code
 ):
     manager_page = ManagerPage(driver)
     manager_page.open()
@@ -26,4 +27,4 @@ def test_create_customer_and_delete_specific_customer(
     list_customers_page.open()
     list_customers_page.sort_by_first_name()
     list_customers_page.delete_specific_customers()
-    time.sleep(10)
+    time.sleep(3)
