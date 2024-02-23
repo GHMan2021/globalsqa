@@ -9,13 +9,13 @@ class ListCustomersPage(BasePage):
     FIRST_NAMES_LIST = ("xpath", "(//tr[@class='ng-scope']//td[1])")
     DELETE_BTN_LIST = ("xpath", "(//button[@ng-click='deleteCust(cust)'])")
 
-    @allure.step("Sort column by first name")
+    @allure.step("Пользователи отсортированы по имени")
     def sort_by_first_name(self):
         column = self.wait.until(EC.element_to_be_clickable(self.FIRST_NAME_TITLE))
         column.click()
         column.click()
 
-    @allure.step("Delete customers by special condition")
+    @allure.step("Пользователь/и удален/ы")
     def delete_specific_customers(self):
         names_elements = self.wait.until(
             EC.presence_of_all_elements_located(self.FIRST_NAMES_LIST),
