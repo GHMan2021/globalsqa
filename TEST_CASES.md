@@ -9,8 +9,8 @@
 #### 2.	Сортировка клиентов по имени (First Name)
 - Открыть страницу "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager"
 - Нажать пункт меню "Customers"
-- Дважды нажать на заголовок колонки таблицы "First Name"
-- Проверить, что имена отсортирована в алфавитном порядке 
+- Дважды нажать на заголовок колонки "First Name" таблицы 
+- Проверить, что имена отсортированы в алфавитном порядке 
 #### 3.	Удаление клиента
 - Открыть страницу "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager"
 - Нажать пункт меню "Customers"
