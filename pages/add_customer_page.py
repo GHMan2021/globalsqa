@@ -26,8 +26,14 @@ class AddCustomerPage(BasePage):
     def click_add_customer_submit_btn(self):
         self.wait.until(EC.element_to_be_clickable(self.ADD_CUSTOMER_SUBMIT_BTN)).click()
 
-    @allure.step("Подтвердить нажатием 'OK' во всплывающем окне")
-    def accept_alert(self):
+    @allure.step("Проверка сообщения об успешном создании клиента")
+    def check_successful_message(self):
+        self.wait.until((EC.alert_is_present()))
+        alert = self.driver.switch_to.alert
+        return alert.text[:-1]
+
+    @allure.step("Нажать кнопку 'OK'")
+    def click_alert(self):
         self.wait.until((EC.alert_is_present()))
         alert = self.driver.switch_to.alert
         alert.accept()
