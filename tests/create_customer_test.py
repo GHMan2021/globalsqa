@@ -45,6 +45,4 @@ def test_create_customer(driver, first_name, last_name, post_code):
         add_customer_page.click_alert()
 
     with allure.step("Проверить, что клиент добавлен"):
-        all_customers = add_customer_page.get_all_customers_list()
-
-        assert (first_name, last_name, post_code) in all_customers, "Клиент не найден"
+        assert (first_name, last_name, post_code) in add_customer_page.get_all_customers_list(), f"Клиент {first_name} {last_name} с почтовым кодом {post_code} не найден в списке всех клиентов"
