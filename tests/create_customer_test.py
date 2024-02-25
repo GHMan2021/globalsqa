@@ -37,9 +37,7 @@ def test_create_customer(driver, first_name, last_name, post_code):
         add_customer_page.click_add_customer_submit_btn()
 
     with allure.step("Проверить, что появилось сообщение об успешной регистрации"):
-        msg = add_customer_page.check_successful_message()
-
-        assert msg == "Customer added successfully with customer id :", "Клиент не создан"
+        assert add_customer_page.check_successful_message() == "Customer added successfully with customer id :", "Клиент не создан"
 
     with allure.step("Принять сообщение"):
         add_customer_page.click_alert()
