@@ -1,7 +1,6 @@
 import allure
 
 from pages.base_page import BasePage
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class AddCustomerPage(BasePage):
@@ -11,29 +10,27 @@ class AddCustomerPage(BasePage):
     ADD_CUSTOMER_SUBMIT_BTN = ("xpath", "//form[@name='myForm']//button[@type='submit']")
 
     @allure.step("Ввести имя")
-    def enter_first_name(self, login):
-        self.wait.until(EC.element_to_be_clickable(self.FIRST_NAME_FIELD)).send_keys(login)
+    def enter_first_name(self, first_name):
+        self.wait_element_to_be_clickable(self.FIRST_NAME_FIELD).send_keys(first_name)
 
     @allure.step("Ввести фамилию")
-    def enter_last_name(self, password):
-        self.wait.until(EC.element_to_be_clickable(self.LAST_NAME_FIELD)).send_keys(password)
+    def enter_last_name(self, last_name):
+        self.wait_element_to_be_clickable(self.LAST_NAME_FIELD).send_keys(last_name)
 
     @allure.step("Ввести почтовый код")
     def enter_post_code(self, post_code):
-        self.wait.until(EC.element_to_be_clickable(self.POST_CODE_FIELD)).send_keys(post_code)
+        self.wait_element_to_be_clickable(self.POST_CODE_FIELD).send_keys(post_code)
 
     @allure.step("Нажать кнопку 'Add Customer'")
     def click_add_customer_submit_btn(self):
-        self.wait.until(EC.element_to_be_clickable(self.ADD_CUSTOMER_SUBMIT_BTN)).click()
+        self.wait_element_to_be_clickable(self.ADD_CUSTOMER_SUBMIT_BTN).click()
 
     @allure.step("Проверка сообщения об успешном создании клиента")
-    def check_successful_message(self):
-        self.wait.until((EC.alert_is_present()))
-        alert = self.driver.switch_to.alert
-        return alert.text[:-1]
+    def get_alert_message(self):
+        self.wait_alert_is_present()
+        return self.driver.switch_to.alert.text[:-1]
 
     @allure.step("Нажать кнопку 'OK'")
     def click_alert(self):
-        self.wait.until((EC.alert_is_present()))
-        alert = self.driver.switch_to.alert
-        alert.accept()
+        self.wait_alert_is_present()
+        self.driver.switch_to.alert.accept()

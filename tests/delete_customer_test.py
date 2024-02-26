@@ -1,6 +1,7 @@
 import allure
 
 from pages.list_customers_page import ListCustomersPage
+from pages.manager_page import ManagerPage
 
 
 @allure.feature('globalsqa.com')
@@ -11,21 +12,22 @@ from pages.list_customers_page import ListCustomersPage
     Предусловие: Открыть браузер
 
     Шаги:
-    1. Открыть страницу "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager"
-    2. Нажать на пункт меню "Customers"
-    3. Нажать кнопу "Delete" у тех записей, имена которых соответствует специальному критерию
-    4. Проверить, что выбранные клиенты отсутствуют в таблице
+    1. Открыть страницу "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager"    
+    2. Нажать кнопу "Delete" у тех записей, имена которых соответствует специальному критерию
+    3. Проверить, что выбранные клиенты отсутствуют в таблице
     """)
 def test_delete_customers(driver):
-    with allure.step("Открыть страницу 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager'"):
+    with allure.step("Открытие страницу 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager'"):
         list_customers_page = ListCustomersPage(driver)
         list_customers_page.open()
 
-    with allure.step("Удалить клиентов"):
-        list_customers_page.click_on_item_menu("Customers")
-        delete_records_list = list_customers_page.delete_customers()
+    with allure.step("Удаление клиентов"):
+        manager_page = ManagerPage(driver)
+        manager_page.click_on_item_menu("Customers")
+        delete_records_list = list_customers_page.get_delete_records_element_list()
+        list_customers_page.delete_customers()
 
-    with allure.step("Проверить, что выбранные клиенты отсутствуют в таблице"):
-        all_customers_list = list_customers_page.get_all_customers_list()
+    with allure.step("Проверка, что выбранные клиенты отсутствуют в таблице"):
+        all_customers_list = list_customers_page.get_all_records_elements_list()
 
         assert list(set(all_customers_list) & set(delete_records_list)) == [], "Клиенты не удалены"

@@ -1,50 +1,70 @@
 import allure
 
 from pages.base_page import BasePage
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class ListCustomersPage(BasePage):
+    TABLE_DATA_ROWS_LIST = ("xpath", "(//table//tbody//tr)")
     FIRST_NAME_TITLE = ("xpath", "//a[contains(text(),'First Name')]")
+
+    FIRST_NAMES_LIST = ("xpath", "(//tr[@class='ng-scope']//td[1])")
+    LAST_NAMES_LIST = ("xpath", "(//tr[@class='ng-scope']//td[2])")
+    POST_CODE_LIST = ("xpath", "(//tr[@class='ng-scope']//td[3])")
     DELETE_BTN_LIST = ("xpath", "(//button[@ng-click='deleteCust(cust)'])")
 
     @allure.step("Сортировать пользователей по имени")
     def sort_by_first_name(self):
-        column = self.wait.until(EC.element_to_be_clickable(self.FIRST_NAME_TITLE))
+        column = self.wait_element_to_be_clickable(self.FIRST_NAME_TITLE)
         column.click()
         column.click()
 
     @allure.step("Удалить клиентов")
     def delete_customers(self):
-        names_elements = self.wait.until(EC.presence_of_all_elements_located(self.FIRST_NAMES_LIST))
+        delete_records_element_list = self.get_delete_records_element_list()
+        for elem in delete_records_element_list:
+            elem[3].click()
 
-        names_list = [i.text for i in names_elements]
-        lengths_names_list = list(map(len, names_list))
-        avg_value = sum(lengths_names_list) / len(lengths_names_list)
-        min_deviation_value = min(list(map(lambda x: abs(float(x) - avg_value), lengths_names_list)))
+    def get_all_records_elements_list(self):
+        count_data_row = len(self.wait_presence_of_all_elements_located(self.TABLE_DATA_ROWS_LIST))
 
-        delete_btn_elements = []
-        delete_records_list = []
-        for i in range(1, len(names_elements) + 1):
-            deviation_value = abs(len(names_list[i - 1]) - avg_value)
+        all_records_elements_list = []
+        for i in range(1, count_data_row + 1):
+            first_name_element_locator = ("xpath", f"{self.FIRST_NAMES_LIST[1]}[{i}]")
+            last_name_element_locator = ("xpath", f"{self.LAST_NAMES_LIST[1]}[{i}]")
+            post_code_element_locator = ("xpath", f"{self.POST_CODE_LIST[1]}[{i}]")
+            delete_btn_element_locator = ("xpath", f"{self.DELETE_BTN_LIST[1]}[{i}]")
 
-            if deviation_value == min_deviation_value:
-                delete_btn_element_locator = ("xpath", f"{self.DELETE_BTN_LIST[1]}[{i}]")
-                first_name_element_locator = ("xpath", f"{self.FIRST_NAMES_LIST[1]}[{i}]")
-                last_name_element_locator = ("xpath", f"{self.LAST_NAMES_LIST[1]}[{i}]")
-                post_code_element_locator = ("xpath", f"{self.POST_CODE_LIST[1]}[{i}]")
+            record = tuple(self.wait_presence_of_element_located(i) for i in [
+                first_name_element_locator,
+                last_name_element_locator,
+                post_code_element_locator,
+                delete_btn_element_locator
+            ])
+            all_records_elements_list.append(record)
 
-                delete_btn_element = self.wait.until(EC.element_to_be_clickable(delete_btn_element_locator))
-                first_name_element = self.wait.until(EC.presence_of_element_located(first_name_element_locator))
-                last_name_element = self.wait.until(EC.presence_of_element_located(last_name_element_locator))
-                post_code_element = self.wait.until(EC.presence_of_element_located(post_code_element_locator))
+        return all_records_elements_list
 
-                delete_btn_elements.append(delete_btn_element)
+    def get_delete_records_element_list(self):
+        all_records_element_list = self.get_all_records_elements_list()
+        lengths_names_list = [len(elem[0].text) for elem in all_records_element_list]
+        comparison_value = self.value_with_min_deviation_from_avg(lengths_names_list)
 
-                record = (first_name_element.text, last_name_element.text, post_code_element.text)
-                delete_records_list.append(record)
+        delete_records_element_list = [
+            elem for elem in all_records_element_list if len(elem[0].text) == comparison_value
+        ]
 
-        for i in delete_btn_elements:
-            i.click()
+        return delete_records_element_list
 
-        return delete_records_list
+    def get_all_data_customers(self):
+        all_records_element_list = self.get_all_records_elements_list()
+        all_data_element_list = [i[:-1] for i in all_records_element_list]
+        all_data_customers = [tuple(i.text for i in elem) for elem in all_data_element_list]
+        return all_data_customers
+
+    def value_with_min_deviation_from_avg(self, number_list):
+        avg_value = sum(number_list) / len(number_list)
+        min_deviation_value = min(list(map(lambda x: abs(x - avg_value), number_list)))
+
+        for item in number_list:
+            if abs(item - avg_value) == min_deviation_value:
+                return item
