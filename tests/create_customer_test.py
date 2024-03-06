@@ -33,6 +33,7 @@ def test_create_customer(driver, first_name, last_name, post_code):
     with allure.step("Создание нового клиента"):
         manager_page = ManagerPage(driver)
         manager_page.click_on_item_menu("Add Customer")
+
         add_customer_page.enter_first_name(first_name)
         add_customer_page.enter_last_name(last_name)
         add_customer_page.enter_post_code(post_code)
@@ -48,7 +49,10 @@ def test_create_customer(driver, first_name, last_name, post_code):
     with allure.step("Проверка, что клиент добавлен"):
         manager_page.click_on_item_menu("Customers")
         list_customers_page = ListCustomersPage(driver)
-        assert (first_name, last_name,
-                post_code) in list_customers_page.get_all_data_customers(), (f"Клиент {first_name} {last_name} "
-                                                                             f"с почтовым кодом {post_code} "
-                                                                             f"не найден в списке всех клиентов")
+        assert (
+                   first_name,
+                   last_name,
+                   post_code
+               ) in list_customers_page.get_all_data_customers(), (f"Клиент {first_name} {last_name} "
+                                                                   f"с почтовым кодом {post_code} "
+                                                                   f"не найден в списке всех клиентов")
