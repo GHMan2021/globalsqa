@@ -1,5 +1,6 @@
 import allure
 import pytest
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from pages.add_customer_page import AddCustomerPage
 from data.data import Customer
@@ -25,7 +26,7 @@ from pages.manager_page import ManagerPage
     'first_name, last_name, post_code',
     [(Customer.first_name, Customer.last_name, Customer.post_code)]
 )
-def test_create_customer(driver, first_name, last_name, post_code):
+def test_create_customer(driver: WebDriver, first_name: str, last_name: str, post_code: str) -> None:
     with allure.step("Открытие страницу 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager'"):
         add_customer_page = AddCustomerPage(driver)
         add_customer_page.open()

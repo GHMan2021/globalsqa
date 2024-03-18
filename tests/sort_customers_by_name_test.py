@@ -1,4 +1,5 @@
 import allure
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from pages.list_customers_page import ListCustomersPage
 from pages.manager_page import ManagerPage
@@ -16,7 +17,7 @@ from pages.manager_page import ManagerPage
     2. Дважды нажать на заголовок таблицы "First Name" для сортировки пользователей по имени
     3. Проверить, что имена отсортирована в алфавитном порядке
     """)
-def test_sort_by_first_name(driver):
+def test_sort_by_first_name(driver: WebDriver) -> None:
     with allure.step("Открытие страницу 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager'"):
         list_customers_page = ListCustomersPage(driver)
         list_customers_page.open()

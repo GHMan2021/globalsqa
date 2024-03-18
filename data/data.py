@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from faker import Faker
 
 fake = Faker()
-Faker.seed()
 
 
 def convert_post_code_to_name(post_code_digits: str) -> str:
